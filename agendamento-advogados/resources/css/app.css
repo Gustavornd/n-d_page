@@ -1,0 +1,35 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+    html {
+        scroll-behavior: smooth;
+    }
+}
+
+@layer utilities {
+    .bg-dark-luxury-lines {
+        background-color: #2C2C2C;
+        background-image: 
+            radial-gradient(circle at 85% 20%, rgba(212, 175, 55, 0.12) 0%, transparent 45%),
+            radial-gradient(circle at 15% 85%, rgba(180, 180, 180, 0.08) 0%, transparent 40%),
+            linear-gradient(135deg, rgba(255, 255, 255, 0.015) 25%, transparent 25%),
+            linear-gradient(225deg, rgba(255, 255, 255, 0.015) 25%, transparent 25%);
+        background-size: 100% 100%, 100% 100%, 60px 60px, 60px 60px;
+    }
+
+    .gold-gradient-text {
+        background: linear-gradient(135deg, #F3E5AB 0%, #D4AF37 50%, #B8972E 100%);
+        -webkit-background-clip: text;
+        -webkit-text-fill-color: transparent;
+    }
+
+    .gold-gradient-btn {
+        background: linear-gradient(135deg, #D4AF37 0%, #ECCFA2 45%, #C5A028 100%);
+    }
+
+    .gold-glow {
+        box-shadow: 0 0 30px rgba(212, 175, 55, 0.22);
+    }
+}
