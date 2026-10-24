@@ -7,26 +7,12 @@ use App\Models\Servico;
 use App\Models\Agendamento;
 use Carbon\Carbon;
 use App\Models\Expediente;
-use App\Models\Contato;
 
 class SiteController extends Controller
 {
     public function index(){
         $servicos = Servico::where('ativa',true)->get();
         return view('welcome', compact('servicos'));
-    }
-
-    public function contato(Request $request){
-        $dadosValidados = $request->validate([
-            'nome' => 'required|string|max:255',
-            'email' => 'required|email|max:255',
-            'telefone' => 'required|string|max:25',
-            'mensagem' => 'required|string|max:3000',
-        ]);
-
-        Contato::create($dadosValidados);
-
-        return back()->with('sucesso', 'Mensagem enviada com sucesso! Nossa equipe entrará em contato brevemente.');
     }
 
     public function store(Request $request){

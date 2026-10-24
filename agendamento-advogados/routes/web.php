@@ -9,7 +9,6 @@ use App\Http\Controllers\ProfileController;
 
 Route::get('/', [SiteController::class, 'index']) -> name('home');
 Route::post('/agendar', [SiteController::class,'store']) -> name('agendar');
-Route::post('/contato', [SiteController::class, 'contato']) -> name('contato');
 
 Route::middleware(['auth','verified']) -> group(function (){
     Route::get('/dashboard', [AdminController::class, 'index']) -> name('dashboard');
