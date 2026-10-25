@@ -13,14 +13,15 @@
 
         <!-- Scripts -->
         @vite(['resources/css/app.css', 'resources/js/app.js'])
+        @stack('styles')
     </head>
-    <body class="font-sans antialiased">
-        <div class="min-h-screen bg-carbon-black">
+    <body class="font-sans antialiased bg-preto-absoluto text-off-white selection:bg-dourado-prestigio selection:text-preto-absoluto">
+        <div class="min-h-screen bg-preto-absoluto flex flex-col">
             @include('layouts.navigation')
 
             <!-- Page Heading -->
             @isset($header)
-                <header class="bg-graphite shadow">
+                <header class="bg-cinza-grafite shadow border-b border-[#3A3A3A]">
                     <div class="max-w-7xl mx-auto py-6 px-4 sm:px-6 lg:px-8">
                         {{ $header }}
                     </div>
@@ -28,9 +29,15 @@
             @endisset
 
             <!-- Page Content -->
-            <main>
-                {{ $slot }}
+            <main class="flex-grow flex flex-col">
+                @isset($slot)
+                    {{ $slot }}
+                @endisset
+                @yield('content')
             </main>
+
+            @yield('footer')
         </div>
+        @stack('scripts')
     </body>
 </html>

@@ -9,7 +9,7 @@ Este documento resume a estrutura oficial do projeto para o escritório **Nunes 
 - **Escritório**: **Nunes & Durães Advocacia**
 - **Stack**: Laravel 12, SQLite (`database/database.sqlite`), Tailwind CSS, Alpine.js e Vite.
 - **Estrutura de Telas**:
-  1. **Área Pública (`welcome.blade.php`)**: Utiliza o layout padrão da aplicação (`<x-app-layout>`) com navegação corporativa (`layouts/navigation.blade.php`), apresentando o design *Dark-Luxury* e o formulário oficial de solicitação de agendamento.
+  1. **Área Pública (`welcome.blade.php`)**: Utiliza o layout padrão da aplicação (`@extends('layouts.app')`) com navegação corporativa (`layouts/navigation.blade.php`), apresentando o design *Dark-Luxury* e o formulário oficial de solicitação de agendamento.
   2. **Área de Gestão (`dashboard.blade.php` e `servicos/`)**: Painel administrativo para os advogados gerenciarem status de agendamentos, lista de especialidades jurídicas e horários de expediente.
 
 ---
@@ -52,7 +52,7 @@ agendamento-advogados/
 │   │   ├── app.blade.php        # Layout principal com fonte e assets
 │   │   ├── navigation.blade.php # Barra de navegação corporativa (Início, Gestão, Login)
 │   │   └── guest.blade.php      # Layout para telas de autenticação
-│   ├── welcome.blade.php        # Landing page integrada com <x-app-layout>
+│   ├── welcome.blade.php        # Landing page integrada com @extends('layouts.app')
 │   └── dashboard.blade.php      # Painel administrativo
 ├── routes/
 │   └── web.php                  # Rotas oficiais (home, agendar, dashboard, servicos, profile)
@@ -84,7 +84,7 @@ npm run dev
 ```powershell
 php artisan test
 ```
-*32 testes executados com 100% de sucesso.*
+*36 testes automatizados executados com 100% de sucesso.*
 
 ---
 
