@@ -13,7 +13,11 @@
                     <h1 class="text-2xl font-bold text-bright-amber">Bem vindo(a),
                         {{ Auth::user()?->name ?? 'Visitante' }}!
                     </h1>
-                    <p class="text-bright-lemon">Aqui está os andamento dos agendamentos para essa semana:</p>
+                    @if(Auth::user()?->isAdmin())
+                        <p class="text-bright-lemon">Visão Geral do Escritório (Todas as Sedes e Advogados):</p>
+                    @else
+                        <p class="text-bright-lemon">Você está visualizando a sua pauta pessoal de agendamentos (Dr(a). {{ Auth::user()?->name }}).</p>
+                    @endif
                 </header>
                 <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4">
                     <div class="bg-dust-grey p-4 rounded-lg shadow-md">
@@ -33,15 +37,45 @@
 
             <div class="py-10 px-4">
                 @if(session('sucesso'))
-                    <div>{{ session('sucesso') }}</div>
+                    <div class="mb-4 p-3 bg-green-100 border border-green-400 text-green-700 rounded">{{ session('sucesso') }}</div>
                 @endif
 
-                <!-- barra de pesquisa -->
-                <form method="GET" action="{{ route('dashboard') }}">
+                @if($errors->any())
+                    <div class="mb-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+                        <ul class="list-disc pl-5">
+                            @foreach($errors->all() as $error)
+                                <li>{{ $error }}</li>
+                            @endforeach
+                        </ul>
+                    </div>
+                @endif
+
+                <!-- Barra de pesquisa e filtros -->
+                <form method="GET" action="{{ route('dashboard') }}" class="mb-6 flex flex-wrap items-center gap-3">
                     <input type="text" name="busca" placeholder="Buscar por nome, email ou mensagem..."
                         value="{{ request('busca') }}" class="w-80 px-3 py-2 border rounded-lg bg-dust-grey text-graphite">
+
+                    @if(Auth::user()?->isAdmin())
+                        <!-- Filtro por Sede -->
+                        <select name="sede" class="px-3 py-2 border rounded-lg bg-dust-grey text-graphite">
+                            <option value="">Todas as Sedes</option>
+                            <option value="capitao_eneas" {{ request('sede') === 'capitao_eneas' ? 'selected' : '' }}>Capitão Enéas</option>
+                            <option value="montes_claros" {{ request('sede') === 'montes_claros' ? 'selected' : '' }}>Montes Claros</option>
+                        </select>
+
+                        <!-- Filtro por Advogado -->
+                        <select name="advogado_id" class="px-3 py-2 border rounded-lg bg-dust-grey text-graphite">
+                            <option value="">Todos os Advogados</option>
+                            @foreach($advogados as $adv)
+                                <option value="{{ $adv->id }}" {{ request('advogado_id') == $adv->id ? 'selected' : '' }}>
+                                    {{ $adv->name }}
+                                </option>
+                            @endforeach
+                        </select>
+                    @endif
+
                     <button type="submit"
-                        class="border border-bright-lemon bg-bright-amber text-carbon-black rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-bright-lemon focus:outline-none focus:shadow-outline">Buscar</button>
+                        class="border border-bright-lemon bg-bright-amber text-carbon-black rounded-md px-4 py-2 transition duration-500 ease select-none hover:bg-bright-lemon focus:outline-none focus:shadow-outline">Buscar</button>
                     <a href="{{ route('dashboard') }}" class="text-bright-lemon underline">Limpar</a>
                 </form>
 
@@ -51,6 +85,8 @@
                         <thead>
                             <tr class="bg-graphite text-bright-lemon uppercase text-sm leading-normal">
                                 <th class="py-3 px-6 text-left">Data / Hora</th>
+                                <th class="py-3 px-6 text-left">Sede</th>
+                                <th class="py-3 px-6 text-left">Advogado Responsável</th>
                                 <th class="py-3 px-6 text-left">Cliente</th>
                                 <th class="py-3 px-6 text-left">Serviço</th>
                                 <th class="py-3 px-6 text-left">Mensagem</th>
@@ -63,6 +99,27 @@
                                 <tr class="border-b border-gray-500 bg-dust-grey hover:bg-gray-100 text-carbon-black">
                                     <td class="py-3 px-6 text-left">{{ date('d/m/Y', strtotime($agendamento->data)) }} às
                                         {{ $agendamento->horario }}
+                                    </td>
+                                    <td class="py-3 px-6 text-left">
+                                        <span class="px-2.5 py-1 text-xs font-semibold rounded-full {{ $agendamento->sede === 'montes_claros' ? 'bg-purple-100 text-purple-800' : 'bg-amber-100 text-amber-800' }}">
+                                            {{ $agendamento->nome_sede }}
+                                        </span>
+                                    </td>
+                                    <td class="py-3 px-6 text-left">
+                                        <div class="font-medium text-carbon-black">{{ $agendamento->advogado?->name ?? 'Não atribuído' }}</div>
+                                        @if(Auth::user()?->isAdmin() && isset($advogados))
+                                            <form method="POST" action="{{ route('agendamentos.reatribuir', $agendamento->id) }}" class="mt-1">
+                                                @csrf @method('PATCH')
+                                                <select name="advogado_id" onchange="this.form.submit()" class="text-xs py-1 px-2 border rounded bg-white text-gray-700">
+                                                    <option value="" disabled {{ !$agendamento->advogado_id ? 'selected' : '' }}>Reatribuir...</option>
+                                                    @foreach($advogados as $adv)
+                                                        <option value="{{ $adv->id }}" {{ $agendamento->advogado_id == $adv->id ? 'selected' : '' }}>
+                                                            {{ $adv->name }} ({{ $adv->sede_padrao === 'montes_claros' ? 'Montes Claros' : 'Capitão Enéas' }})
+                                                        </option>
+                                                    @endforeach
+                                                </select>
+                                            </form>
+                                        @endif
                                     </td>
                                     <td class="py-3 px-6 text-left">
                                         <div>{{ $agendamento->nome }}</div>
@@ -94,7 +151,7 @@
                                                     action="{{ route('agendamentos.status', $agendamento->id) }}">
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="concluido">
-                                                    <button type="submit">
+                                                    <button type="submit" title="Concluir agendamento">
                                                         <div class="bg-green-300 mr-3 rounded-full">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -109,7 +166,7 @@
                                                     action="{{ route('agendamentos.status', $agendamento->id) }}">
                                                     @csrf @method('PATCH')
                                                     <input type="hidden" name="status" value="cancelado">
-                                                    <button type="submit">
+                                                    <button type="submit" title="Cancelar agendamento">
                                                         <div class="bg-red-300 mr-3 rounded-full">
                                                             <svg xmlns="http://www.w3.org/2000/svg" fill="none"
                                                                 viewBox="0 0 24 24" stroke-width="1.5" stroke="currentColor"
@@ -126,7 +183,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td class="py-3 px-6 text-left" colspan="6">Nenhum agendamento encontrado.</td>
+                                    <td class="py-3 px-6 text-left" colspan="8">Nenhum agendamento encontrado.</td>
                                 </tr>
                             @endforelse
                         </tbody>

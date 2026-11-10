@@ -5,6 +5,7 @@ namespace Database\Seeders;
 use Illuminate\Database\Seeder;
 use App\Models\Agendamento;
 use App\Models\Servico;
+use App\Models\User;
 use Faker\Factory as Faker;
 
 class AgendamentoSeeder extends Seeder
@@ -21,6 +22,9 @@ class AgendamentoSeeder extends Seeder
             $this->call(ServicoSeeder::class);
             $servicosIds = Servico::pluck('id')->toArray();
         }
+
+        $advogadosCapitao = User::where('role', 'advogado')->where('sede_padrao', 'capitao_eneas')->pluck('id')->toArray();
+        $advogadosMontes = User::where('role', 'advogado')->where('sede_padrao', 'montes_claros')->pluck('id')->toArray();
 
         // Status permitidos pela migration
         $statusDisponiveis = ['pendente', 'concluido', 'cancelado'];
@@ -39,11 +43,21 @@ class AgendamentoSeeder extends Seeder
         ];
 
         for ($i = 0; $i < 50; $i++) {
+            $sede = $faker->randomElement(['capitao_eneas', 'montes_claros']);
+            $advogadoId = null;
+            if ($sede === 'capitao_eneas' && !empty($advogadosCapitao)) {
+                $advogadoId = $faker->randomElement($advogadosCapitao);
+            } elseif ($sede === 'montes_claros' && !empty($advogadosMontes)) {
+                $advogadoId = $faker->randomElement($advogadosMontes);
+            }
+
             Agendamento::create([
                 'nome' => $faker->name,
                 'email' => $faker->unique()->safeEmail,
                 'telefone' => $faker->phoneNumber,
                 'servico_id' => $faker->randomElement($servicosIds),
+                'sede' => $sede,
+                'advogado_id' => $advogadoId,
                 'data' => $faker->dateTimeBetween('-1 month', '+2 months')->format('Y-m-d'),
                 'horario' => $faker->time('H:i'),
                 'mensagem' => $faker->randomElement($mensagensExemplo),

@@ -14,6 +14,8 @@ class AgendamentoFactory extends Factory
             'email' => fake()->unique()->safeEmail(),
             'telefone' => fake()->phoneNumber(),
             'servico_id' => Servico::factory(),
+            'sede' => 'capitao_eneas',
+            'advogado_id' => null,
             'data' => fake()->dateTimeBetween('+1 days', '+1 month')->format('Y-m-d'),
             'horario' => fake()->numberBetween(8, 17) . ':00',
             'mensagem' => fake()->sentence(),

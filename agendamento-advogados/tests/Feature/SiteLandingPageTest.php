@@ -7,6 +7,7 @@ use Tests\TestCase;
 use App\Models\Servico;
 use App\Models\Expediente;
 use App\Models\Agendamento;
+use App\Models\User;
 use Carbon\Carbon;
 
 class SiteLandingPageTest extends TestCase
@@ -268,5 +269,343 @@ class SiteLandingPageTest extends TestCase
 
         $response->assertRedirect(route('home'));
         $response->assertSessionHasErrors(['mensagem']);
+    }
+
+    public function test_landing_page_exibe_selecao_de_sede_e_advogados(): void
+    {
+        User::factory()->advogado('capitao_eneas', 'OAB/MG 129.637')->create(['name' => 'Dr. Delssi Durães Oliveira']);
+        User::factory()->advogado('capitao_eneas', 'OAB/MG 188.944')->create(['name' => 'Dra. Gerlice Correia Nunes Oliveira']);
+        User::factory()->advogado('montes_claros', 'OAB/MG 202.752')->create(['name' => 'Dra. Rosevania Correia Nunes da Mata']);
+        Servico::create(['titulo' => 'Direito Civil', 'ativa' => true]);
+
+        $response = $this->get(route('home'));
+
+        $response->assertStatus(200);
+        $response->assertSee('name="sede"', false);
+        $response->assertSee('Capitão Enéas – MG (Centro)');
+        $response->assertSee('Montes Claros – MG (Vila Campos)');
+        $response->assertSee('name="advogado_id"', false);
+        $response->assertSee('Sem preferência (Qualquer profissional disponível)');
+        $response->assertSee('Sem preferência / Dra. Rosevania Correia Nunes da Mata');
+        $response->assertSee('Dr. Delssi Durães Oliveira');
+        $response->assertSee('Dra. Gerlice Correia Nunes Oliveira');
+        $response->assertSee('Dra. Rosevania Correia Nunes da Mata');
+        $response->assertSee('Nossa equipe atua de forma integrada: o atendimento inicial ocorre presencialmente na sede escolhida, sem necessidade de deslocamento entre cidades.');
+    }
+
+    public function test_agendamento_com_advogado_especifico_em_capitao_eneas(): void
+    {
+        $delssi = User::factory()->advogado('capitao_eneas')->create(['name' => 'Dr. Delssi']);
+        $servico = Servico::create(['titulo' => 'Direito Civil', 'ativa' => true]);
+        Expediente::create(['dia_semana' => 1, 'inicio' => '08:00', 'fim' => '18:00']);
+
+        $proximaSegunda = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
+
+        $response = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Marcos Lima',
+            'email' => 'marcos@teste.com',
+            'telefone' => '38999990001',
+            'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas',
+            'advogado_id' => $delssi->id,
+            'data' => $proximaSegunda,
+            'horario' => '10:00',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHas('sucesso');
+
+        $this->assertDatabaseHas('agendamentos', [
+            'nome' => 'Marcos Lima',
+            'sede' => 'capitao_eneas',
+            'advogado_id' => $delssi->id,
+            'horario' => '10:00',
+        ]);
+    }
+
+    public function test_agendamento_sem_preferencia_em_montes_claros_atribui_rosevania(): void
+    {
+        $rosevania = User::factory()->advogado('montes_claros')->create(['name' => 'Dra. Rosevania']);
+        $servico = Servico::create(['titulo' => 'Direito Civil', 'ativa' => true]);
+        Expediente::create(['dia_semana' => 1, 'inicio' => '08:00', 'fim' => '18:00']);
+
+        $proximaSegunda = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
+
+        $response = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Beatriz Santos',
+            'email' => 'beatriz@teste.com',
+            'telefone' => '38999990002',
+            'servico_id' => $servico->id,
+            'sede' => 'montes_claros',
+            'advogado_id' => '',
+            'data' => $proximaSegunda,
+            'horario' => '14:00',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHas('sucesso');
+
+        $this->assertDatabaseHas('agendamentos', [
+            'nome' => 'Beatriz Santos',
+            'sede' => 'montes_claros',
+            'advogado_id' => $rosevania->id,
+        ]);
+    }
+
+    public function test_agendamento_sem_preferencia_em_capitao_eneas_atribui_advogado_disponivel(): void
+    {
+        $delssi = User::factory()->advogado('capitao_eneas')->create(['name' => 'Dr. Delssi']);
+        $gerlice = User::factory()->advogado('capitao_eneas')->create(['name' => 'Dra. Gerlice']);
+        $servico = Servico::create(['titulo' => 'Direito Civil', 'ativa' => true]);
+        Expediente::create(['dia_semana' => 1, 'inicio' => '08:00', 'fim' => '18:00']);
+
+        $proximaSegunda = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
+
+        // Delssi já está ocupado às 10:00
+        Agendamento::create([
+            'nome' => 'Cliente Ocupante',
+            'email' => 'ocupante@teste.com',
+            'telefone' => '38999990003',
+            'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas',
+            'advogado_id' => $delssi->id,
+            'data' => $proximaSegunda,
+            'horario' => '10:00',
+            'status' => 'pendente'
+        ]);
+
+        // Novo cliente agenda às 10:00 com "Sem preferência"
+        $response = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Novo Cliente',
+            'email' => 'novo@teste.com',
+            'telefone' => '38999990004',
+            'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas',
+            'data' => $proximaSegunda,
+            'horario' => '10:00',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHas('sucesso');
+
+        // Deve ter sido atribuído à Gerlice (que estava livre)
+        $this->assertDatabaseHas('agendamentos', [
+            'nome' => 'Novo Cliente',
+            'sede' => 'capitao_eneas',
+            'advogado_id' => $gerlice->id,
+            'horario' => '10:00',
+        ]);
+    }
+
+    public function test_agendamento_sem_preferencia_em_capitao_eneas_balanceia_pela_menor_quantidade_de_pendentes(): void
+    {
+        $delssi = User::factory()->advogado('capitao_eneas')->create(['name' => 'Dr. Delssi']);
+        $gerlice = User::factory()->advogado('capitao_eneas')->create(['name' => 'Dra. Gerlice']);
+        $servico = Servico::create(['titulo' => 'Direito Civil', 'ativa' => true]);
+        Expediente::create(['dia_semana' => 1, 'inicio' => '08:00', 'fim' => '18:00']);
+
+        $proximaSegunda = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
+
+        // Delssi tem 2 agendamentos pendentes nessa data (em outros horários)
+        Agendamento::create([
+            'nome' => 'C1', 'email' => 'c1@t.com', 'telefone' => '1', 'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas', 'advogado_id' => $delssi->id, 'data' => $proximaSegunda, 'horario' => '08:00', 'status' => 'pendente'
+        ]);
+        Agendamento::create([
+            'nome' => 'C2', 'email' => 'c2@t.com', 'telefone' => '2', 'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas', 'advogado_id' => $delssi->id, 'data' => $proximaSegunda, 'horario' => '09:00', 'status' => 'pendente'
+        ]);
+
+        // Gerlice tem 0 agendamentos nessa data.
+        // Novo agendamento para 14:00 (ambos livres) com "Sem preferência":
+        $response = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Cliente Balanceado',
+            'email' => 'bal@teste.com',
+            'telefone' => '38999990005',
+            'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas',
+            'data' => $proximaSegunda,
+            'horario' => '14:00',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHas('sucesso');
+
+        // Deve atribuir para Gerlice por balanceamento
+        $this->assertDatabaseHas('agendamentos', [
+            'nome' => 'Cliente Balanceado',
+            'advogado_id' => $gerlice->id,
+        ]);
+    }
+
+    public function test_dois_clientes_podem_agendar_no_mesmo_horario_com_advogados_diferentes(): void
+    {
+        $delssi = User::factory()->advogado('capitao_eneas')->create(['name' => 'Dr. Delssi']);
+        $gerlice = User::factory()->advogado('capitao_eneas')->create(['name' => 'Dra. Gerlice']);
+        $servico = Servico::create(['titulo' => 'Direito Civil', 'ativa' => true]);
+        Expediente::create(['dia_semana' => 1, 'inicio' => '08:00', 'fim' => '18:00']);
+
+        $proximaSegunda = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
+
+        // Primeiro cliente agenda com Delssi às 10:00
+        $response1 = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Cliente 1',
+            'email' => 'cli1@teste.com',
+            'telefone' => '38999990006',
+            'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas',
+            'advogado_id' => $delssi->id,
+            'data' => $proximaSegunda,
+            'horario' => '10:00',
+        ]);
+        $response1->assertSessionHas('sucesso');
+
+        // Segundo cliente agenda com Gerlice no MESMO horário (10:00)
+        $response2 = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Cliente 2',
+            'email' => 'cli2@teste.com',
+            'telefone' => '38999990007',
+            'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas',
+            'advogado_id' => $gerlice->id,
+            'data' => $proximaSegunda,
+            'horario' => '10:00',
+        ]);
+        $response2->assertSessionHas('sucesso');
+
+        // Ambos agendamentos devem existir
+        $this->assertEquals(2, Agendamento::where('data', $proximaSegunda)->where('horario', '10:00')->count());
+    }
+
+    public function test_mesmo_advogado_nao_pode_ter_dois_agendamentos_no_mesmo_horario(): void
+    {
+        $delssi = User::factory()->advogado('capitao_eneas')->create(['name' => 'Dr. Delssi']);
+        $servico = Servico::create(['titulo' => 'Direito Civil', 'ativa' => true]);
+        Expediente::create(['dia_semana' => 1, 'inicio' => '08:00', 'fim' => '18:00']);
+
+        $proximaSegunda = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
+
+        // Primeiro agendamento para Delssi
+        Agendamento::create([
+            'nome' => 'Cliente Delssi 1',
+            'email' => 'delssi1@teste.com',
+            'telefone' => '38999990008',
+            'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas',
+            'advogado_id' => $delssi->id,
+            'data' => $proximaSegunda,
+            'horario' => '10:00',
+            'status' => 'pendente',
+        ]);
+
+        // Tentativa de segundo agendamento com mesmo advogado no mesmo dia e horário
+        $response = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Cliente Delssi 2',
+            'email' => 'delssi2@teste.com',
+            'telefone' => '38999990009',
+            'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas',
+            'advogado_id' => $delssi->id,
+            'data' => $proximaSegunda,
+            'horario' => '10:00',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHasErrors(['horario']);
+    }
+
+    public function test_advogado_nao_pode_ser_agendado_em_sede_diferente(): void
+    {
+        $delssi = User::factory()->advogado('capitao_eneas')->create(['name' => 'Dr. Delssi']);
+        $servico = Servico::create(['titulo' => 'Direito Civil', 'ativa' => true]);
+        Expediente::create(['dia_semana' => 1, 'inicio' => '08:00', 'fim' => '18:00']);
+
+        $proximaSegunda = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
+
+        // Tenta marcar Delssi (Capitão Enéas) na sede de Montes Claros
+        $response = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Cliente Sede Errada',
+            'email' => 'errada@teste.com',
+            'telefone' => '38999990010',
+            'servico_id' => $servico->id,
+            'sede' => 'montes_claros',
+            'advogado_id' => $delssi->id,
+            'data' => $proximaSegunda,
+            'horario' => '10:00',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHasErrors(['advogado_id']);
+    }
+
+    public function test_ambos_advogados_ocupados_em_capitao_eneas_rejeita_agendamento_sem_preferencia(): void
+    {
+        $delssi = User::factory()->advogado('capitao_eneas')->create(['name' => 'Dr. Delssi']);
+        $gerlice = User::factory()->advogado('capitao_eneas')->create(['name' => 'Dra. Gerlice']);
+        $servico = Servico::create(['titulo' => 'Direito Civil', 'ativa' => true]);
+        Expediente::create(['dia_semana' => 1, 'inicio' => '08:00', 'fim' => '18:00']);
+
+        $proximaSegunda = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
+
+        // Ocupa ambos os advogados às 10:00
+        Agendamento::create([
+            'nome' => 'Ocupante 1', 'email' => 'o1@t.com', 'telefone' => '1', 'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas', 'advogado_id' => $delssi->id, 'data' => $proximaSegunda, 'horario' => '10:00', 'status' => 'pendente'
+        ]);
+        Agendamento::create([
+            'nome' => 'Ocupante 2', 'email' => 'o2@t.com', 'telefone' => '2', 'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas', 'advogado_id' => $gerlice->id, 'data' => $proximaSegunda, 'horario' => '10:00', 'status' => 'pendente'
+        ]);
+
+        // Tentativa de marcar às 10:00 sem preferência
+        $response = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Terceiro Cliente',
+            'email' => 'o3@teste.com',
+            'telefone' => '38999990011',
+            'servico_id' => $servico->id,
+            'sede' => 'capitao_eneas',
+            'data' => $proximaSegunda,
+            'horario' => '10:00',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHasErrors(['horario']);
+    }
+
+    public function test_advogada_ocupada_em_montes_claros_rejeita_agendamento_sem_preferencia(): void
+    {
+        $rosevania = User::factory()->advogado('montes_claros')->create(['name' => 'Dra. Rosevania']);
+        $servico = Servico::create(['titulo' => 'Direito Administrativo', 'ativa' => true]);
+        Expediente::create(['dia_semana' => 1, 'inicio' => '08:00', 'fim' => '18:00']);
+
+        $proximaSegunda = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
+
+        // Ocupa Rosevania às 14:00
+        Agendamento::create([
+            'nome' => 'Cliente Existente Montes',
+            'email' => 'existente_montes@teste.com',
+            'telefone' => '38999990012',
+            'servico_id' => $servico->id,
+            'sede' => 'montes_claros',
+            'advogado_id' => $rosevania->id,
+            'data' => $proximaSegunda,
+            'horario' => '14:00',
+            'status' => 'pendente'
+        ]);
+
+        // Novo cliente tenta agendar sem preferência no mesmo horário em Montes Claros
+        $response = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Cliente Novo Montes',
+            'email' => 'novo_montes@teste.com',
+            'telefone' => '38999990013',
+            'servico_id' => $servico->id,
+            'sede' => 'montes_claros',
+            'advogado_id' => '',
+            'data' => $proximaSegunda,
+            'horario' => '14:00',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHasErrors(['horario' => 'Não há profissionais disponíveis neste horário para a sede selecionada. Escolha outro horário.']);
     }
 }

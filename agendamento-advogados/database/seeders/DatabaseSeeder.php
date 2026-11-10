@@ -21,16 +21,51 @@ class DatabaseSeeder extends Seeder
             }
         }
 
-        // Executa a criação dos serviços e agendamentos
-        $this->call([ServicoSeeder::class, AgendamentoSeeder::class]);
-
-        // Cria o usuário administrador para acesso ao painel
-        User::firstOrCreate(
+        // Cria ou atualiza o usuário administrador para acesso ao painel
+        User::updateOrCreate(
             ['email' => 'admin@nuneseduraes.com.br'],
             [
-                'name' => 'Admin',
+                'name' => 'Administrador Geral',
                 'password' => bcrypt('password'),
+                'role' => 'admin',
             ]
         );
+
+        // Cria ou atualiza os 3 advogados com suas respectivas sedes e credenciais
+        User::updateOrCreate(
+            ['email' => 'delssi@nuneseduraes.com.br'],
+            [
+                'name' => 'Dr. Delssi Durães Oliveira',
+                'password' => bcrypt('password'),
+                'role' => 'advogado',
+                'sede_padrao' => 'capitao_eneas',
+                'oab' => 'OAB/MG 129.637',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'gerlice@nuneseduraes.com.br'],
+            [
+                'name' => 'Dra. Gerlice Correia Nunes Oliveira',
+                'password' => bcrypt('password'),
+                'role' => 'advogado',
+                'sede_padrao' => 'capitao_eneas',
+                'oab' => 'OAB/MG 188.944',
+            ]
+        );
+
+        User::updateOrCreate(
+            ['email' => 'rosevania@nuneseduraes.com.br'],
+            [
+                'name' => 'Dra. Rosevania Correia Nunes da Mata',
+                'password' => bcrypt('password'),
+                'role' => 'advogado',
+                'sede_padrao' => 'montes_claros',
+                'oab' => 'OAB/MG 202.752',
+            ]
+        );
+
+        // Executa a criação dos serviços e agendamentos
+        $this->call([ServicoSeeder::class, AgendamentoSeeder::class]);
     }
 }

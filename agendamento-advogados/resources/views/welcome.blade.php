@@ -123,7 +123,11 @@
                         @endif
 
                         <!-- Formulário de Agendamento/Contato Existente no Backend -->
-                        <form action="{{ route('agendar') }}" method="POST" class="space-y-4">
+                        <form action="{{ route('agendar') }}" method="POST" class="space-y-4"
+                            x-data="{
+                                sede: '{{ old('sede', 'capitao_eneas') }}',
+                                advogadoId: '{{ old('advogado_id', '') }}'
+                            }">
                             @csrf
 
                             <!-- Nome Completo -->
@@ -171,6 +175,50 @@
                                     @endforeach
                                 </select>
                                 @error('servico_id') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+
+                            <!-- Unidade de Atendimento (Sede) -->
+                            <div>
+                                <label for="sede" class="block text-xs font-medium text-off-white mb-1.5 tracking-wide">
+                                    Unidade de Atendimento (Sede)
+                                </label>
+                                <select id="sede" name="sede" x-model="sede" @change="advogadoId = ''" required
+                                    class="w-full bg-[#181818] border @error('sede') border-red-500/80 focus:border-red-500 focus:ring-red-500/50 @else border-prata-moderno/40 focus:border-dourado-prestigio focus:ring-dourado-prestigio/50 @enderror text-off-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition duration-200">
+                                    <option value="capitao_eneas" {{ old('sede', 'capitao_eneas') == 'capitao_eneas' ? 'selected' : '' }} class="bg-[#181818] text-off-white">
+                                        Capitão Enéas – MG (Centro)
+                                    </option>
+                                    <option value="montes_claros" {{ old('sede') == 'montes_claros' ? 'selected' : '' }} class="bg-[#181818] text-off-white">
+                                        Montes Claros – MG (Vila Campos)
+                                    </option>
+                                </select>
+                                @error('sede') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
+                            </div>
+
+                            <!-- Preferência de Advogado (Opcional) -->
+                            <div>
+                                <label for="advogado_id" class="block text-xs font-medium text-off-white mb-1.5 tracking-wide">
+                                    Preferência de Advogado (Opcional)
+                                </label>
+                                <select id="advogado_id" name="advogado_id" x-model="advogadoId"
+                                    class="w-full bg-[#181818] border @error('advogado_id') border-red-500/80 focus:border-red-500 focus:ring-red-500/50 @else border-prata-moderno/40 focus:border-dourado-prestigio focus:ring-dourado-prestigio/50 @enderror text-off-white rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition duration-200">
+                                    <option value="" x-show="sede === 'capitao_eneas'" :disabled="sede !== 'capitao_eneas'" :hidden="sede !== 'capitao_eneas'" class="bg-[#181818] text-off-white">
+                                        Sem preferência (Qualquer profissional disponível)
+                                    </option>
+                                    <option value="" x-show="sede === 'montes_claros'" :disabled="sede !== 'montes_claros'" :hidden="sede !== 'montes_claros'" class="bg-[#181818] text-off-white">
+                                        Sem preferência / Dra. Rosevania Correia Nunes da Mata
+                                    </option>
+                                    @if(isset($advogados))
+                                        @foreach ($advogados as $adv)
+                                            <option value="{{ $adv->id }}" x-show="sede === '{{ $adv->sede_padrao }}'" :disabled="sede !== '{{ $adv->sede_padrao }}'" :hidden="sede !== '{{ $adv->sede_padrao }}'" {{ old('advogado_id') == $adv->id ? 'selected' : '' }} class="bg-[#181818] text-off-white">
+                                                {{ $adv->name }} {{ $adv->oab ? "({$adv->oab})" : '' }}
+                                            </option>
+                                        @endforeach
+                                    @endif
+                                </select>
+                                <p class="text-xs text-prata-moderno/80 mt-1.5 leading-relaxed">
+                                    Nossa equipe atua de forma integrada: o atendimento inicial ocorre presencialmente na sede escolhida, sem necessidade de deslocamento entre cidades.
+                                </p>
+                                @error('advogado_id') <span class="text-red-400 text-xs mt-1 block">{{ $message }}</span> @enderror
                             </div>
 
                             <!-- Data e Horário (Requeridos pelo Backend e Testes) -->
