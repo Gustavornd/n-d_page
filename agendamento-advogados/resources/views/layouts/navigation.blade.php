@@ -51,9 +51,9 @@
 
             <!-- Direita: Telefone em botão outline dourado + Área de Acesso -->
             <div class="hidden sm:flex sm:items-center sm:gap-4">
-                <a href="tel:11999999999"
+                <a href="tel:38998414101"
                     class="inline-flex items-center px-4 sm:px-5 py-2 rounded-full border border-dourado-prestigio text-dourado-prestigio text-xs sm:text-sm font-medium tracking-wider hover:bg-dourado-prestigio hover:text-preto-absoluto transition-all duration-300 shadow-[0_0_12px_rgba(212,175,55,0.15)]">
-                    (11) 99999-9999
+                    (38) 99841-4101
                 </a>
 
                 @auth
@@ -143,9 +143,9 @@
             @endauth
 
             <div class="pt-3 pb-1 border-t border-[#222222] flex flex-col gap-3">
-                <a href="tel:11999999999"
+                <a href="tel:38998414101"
                     class="text-center py-2.5 rounded-full border border-dourado-prestigio text-dourado-prestigio text-sm font-medium tracking-wider">
-                    (11) 99999-9999
+                    (38) 99841-4101
                 </a>
 
                 @auth

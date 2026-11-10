@@ -33,7 +33,7 @@ class SiteLandingPageTest extends TestCase
         $response->assertSee('Sobre Nós');
         $response->assertSee('Áreas de Atuação');
         $response->assertSee('Contato');
-        $response->assertSee('(11) 99999-9999');
+        $response->assertSee('(38) 99841-4101');
 
         // Hero Section
         $response->assertSee('ESCRITÓRIO DE ADVOCACIA');
@@ -63,6 +63,44 @@ class SiteLandingPageTest extends TestCase
         $response->assertSee('name="mensagem"', false);
         $response->assertSee('placeholder="Como podemos ajudar você?"', false);
         $response->assertSee('ENVIAR MENSAGEM →');
+
+        // Sobre Nós Section
+        $response->assertSee('id="sobre-nos"', false);
+        $response->assertSee('TRADIÇÃO FAMILIAR &amp; EXCELÊNCIA JURÍDICA', false);
+        $response->assertSee('Sobre a Nunes &amp; Durães Advocacia', false);
+        $response->assertSee('Com sede estrategicamente localizada no centro de Capitão Enéas – MG');
+        $response->assertSee('filler.jpeg', false);
+        $response->assertSee('<!-- TODO: Substituir filler.jpeg pela foto oficial do(a) advogado(a) -->', false);
+
+        // Lawyer 1: Dr. Delssi Durães Oliveira
+        $response->assertSee('alt="Dr. Delssi Durães Oliveira - Nunes & Durães Advocacia"', false);
+        $response->assertSee('Dr. Delssi Durães Oliveira');
+        $response->assertSee('OAB/MG 129.637');
+        $response->assertSee('Direito Civil');
+        $response->assertSee('Direito Criminal');
+        $response->assertSee('Direito Público e Eleitoral');
+        $response->assertSee('Ex-Procurador-Geral do Município de Francisco Sá/MG');
+
+        // Lawyer 2: Dra. Gerlice Correia Nunes Oliveira
+        $response->assertSee('alt="Dra. Gerlice Correia Nunes Oliveira - Nunes & Durães Advocacia"', false);
+        $response->assertSee('Dra. Gerlice Correia Nunes Oliveira');
+        $response->assertSee('OAB/MG 188.944');
+        $response->assertSee('Direito Trabalhista');
+        $response->assertSee('Direito Previdenciário');
+        $response->assertSee('Aprovada no XXIV Exame de Ordem Unificado');
+
+        // Lawyer 3: Dra. Rosevania Correia Nunes da Mata
+        $response->assertSee('alt="Dra. Rosevania Correia Nunes da Mata - Nunes & Durães Advocacia"', false);
+        $response->assertSee('Dra. Rosevania Correia Nunes da Mata');
+        $response->assertSee('OAB/MG 202.752');
+        $response->assertSee('Direitos dos Servidores Públicos');
+        $response->assertSee('Direito Administrativo');
+        $response->assertSee('Inscrita na 11ª Subseção da OAB/MG após aprovação no XXIX Exame de Ordem');
+
+        // Office Location & Schedule
+        $response->assertSee('Av. Presidente Costa e Silva, 346 - Centro, Capitão Enéas - MG (CEP 39472-000)');
+        $response->assertSee('Avenida Presidente Costa e Silva, 346 - Centro, Capitão Enéas - MG, CEP: 39472-000');
+        $response->assertSee('Segunda a Quinta-feira, das 08h00 às 17h00');
 
         // Footer
         $response->assertSee('N / D');

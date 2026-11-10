@@ -64,7 +64,7 @@
                     </p>
 
                     <!-- Lista de Diferenciais com Checkmarks/Selo Dourados -->
-                    <ul class="space-y-4 mb-2 scroll-mt-28" id="sobre-nos">
+                    <ul class="space-y-4 mb-2">
                         <li class="flex items-center gap-3.5">
                             <span class="flex-shrink-0 w-6 h-6 text-dourado-prestigio flex items-center justify-center drop-shadow-[0_0_8px_rgba(212,175,55,0.45)]">
                                 <svg class="w-6 h-6" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
@@ -219,6 +219,176 @@
         </div>
     </section>
 
+    <!-- SEÇÃO SOBRE NÓS (NOSSA HISTÓRIA E ESPECIALISTAS) - Fundo Preto Absoluto (#0D0D0D) -->
+    <section id="sobre-nos" class="relative z-10 w-full bg-[#0D0D0D] py-20 lg:py-28 border-t border-[#848484]/20 scroll-mt-20">
+        <div class="max-w-7xl mx-auto px-6 sm:px-8 lg:px-12">
+
+            <!-- 4.1. Cabeçalho Institucional da Seção -->
+            <div class="max-w-3xl mx-auto text-center">
+                <span class="inline-block font-sans text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-[#D4AF37] mb-3">
+                    TRADIÇÃO FAMILIAR &amp; EXCELÊNCIA JURÍDICA
+                </span>
+                <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F9F9FB] tracking-wide mb-6">
+                    Sobre a Nunes &amp; Durães Advocacia
+                </h2>
+                <div class="w-20 h-0.5 bg-[#D4AF37] mx-auto mb-6"></div>
+                <p class="font-sans text-[#B4B4B4] text-base sm:text-lg leading-relaxed">
+                    Com sede estrategicamente localizada no centro de Capitão Enéas – MG, o escritório Nunes &amp; Durães Advocacia une a solidez de uma tradição jurídica familiar a uma atuação técnica, moderna e combativa. Nosso compromisso é oferecer soluções jurídicas personalizadas, éticas e de alto padrão na defesa do patrimônio, da liberdade e dos direitos de nossos clientes em todas as instâncias.
+                </p>
+            </div>
+
+            <!-- 4.3. Grid de Especialistas (3 Colunas no Desktop / 1 Coluna no Mobile) -->
+            <div class="grid grid-cols-1 lg:grid-cols-3 gap-8 mt-14">
+
+                <!-- Card 1: Dr. Delssi Durães Oliveira -->
+                <article class="group bg-[#2C2C2C] border border-[#848484]/20 hover:border-[#D4AF37] rounded-2xl p-6 shadow-xl transition-all duration-300 flex flex-col">
+                    <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-[#0D0D0D] border border-[#D4AF37]/30 group-hover:border-[#D4AF37] border-b-2 border-b-[#D4AF37] transition-colors duration-300 mb-6">
+                        <!-- TODO: Substituir filler.jpeg pela foto oficial do(a) advogado(a) -->
+                        <img src="{{ asset('assets/filler.jpeg') }}"
+                             alt="Dr. Delssi Durães Oliveira - Nunes & Durães Advocacia"
+                             class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#2C2C2C] via-transparent to-transparent opacity-80 pointer-events-none"></div>
+                    </div>
+
+                    <div class="flex flex-col flex-grow">
+                        <h3 class="font-serif text-xl sm:text-2xl font-bold text-[#F9F9FB] group-hover:text-[#D4AF37] transition-colors duration-300">
+                            Dr. Delssi Durães Oliveira
+                        </h3>
+                        <p class="font-sans text-xs sm:text-sm font-semibold tracking-wider text-[#D4AF37] mt-1 mb-4 uppercase">
+                            OAB/MG 129.637
+                        </p>
+
+                        <div class="flex flex-wrap gap-2 mb-5">
+                            <span class="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37]/40">
+                                Direito Civil
+                            </span>
+                            <span class="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37]/40">
+                                Direito Criminal
+                            </span>
+                            <span class="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37]/40">
+                                Direito Público e Eleitoral
+                            </span>
+                        </div>
+
+                        <p class="font-sans text-sm text-[#B4B4B4] leading-relaxed">
+                            Advogado de atuação contundente e vasta experiência nos tribunais, conduzindo desde defesas criminais complexas até grandes litígios cíveis e disputas patrimoniais. Ex-Procurador-Geral do Município de Francisco Sá/MG, possui expressivo histórico de atuação na Vara de Execuções Penais, em demandas contra grandes concessionárias e prefeituras perante o TRE-MG, além de impetração de Habeas Corpus e Recursos Extraordinários junto ao Supremo Tribunal Federal (STF).
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Card 2: Dra. Gerlice Correia Nunes Oliveira -->
+                <article class="group bg-[#2C2C2C] border border-[#848484]/20 hover:border-[#D4AF37] rounded-2xl p-6 shadow-xl transition-all duration-300 flex flex-col">
+                    <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-[#0D0D0D] border border-[#D4AF37]/30 group-hover:border-[#D4AF37] border-b-2 border-b-[#D4AF37] transition-colors duration-300 mb-6">
+                        <!-- TODO: Substituir filler.jpeg pela foto oficial do(a) advogado(a) -->
+                        <img src="{{ asset('assets/filler.jpeg') }}"
+                             alt="Dra. Gerlice Correia Nunes Oliveira - Nunes & Durães Advocacia"
+                             class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#2C2C2C] via-transparent to-transparent opacity-80 pointer-events-none"></div>
+                    </div>
+
+                    <div class="flex flex-col flex-grow">
+                        <h3 class="font-serif text-xl sm:text-2xl font-bold text-[#F9F9FB] group-hover:text-[#D4AF37] transition-colors duration-300">
+                            Dra. Gerlice Correia Nunes Oliveira
+                        </h3>
+                        <p class="font-sans text-xs sm:text-sm font-semibold tracking-wider text-[#D4AF37] mt-1 mb-4 uppercase">
+                            OAB/MG 188.944
+                        </p>
+
+                        <div class="flex flex-wrap gap-2 mb-5">
+                            <span class="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37]/40">
+                                Direito Trabalhista
+                            </span>
+                            <span class="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37]/40">
+                                Direito Previdenciário
+                            </span>
+                        </div>
+
+                        <p class="font-sans text-sm text-[#B4B4B4] leading-relaxed">
+                            Aprovada no XXIV Exame de Ordem Unificado, atua na linha de frente da defesa dos direitos do trabalhador e do segurado. Com sólida vivência em procedimentos investigatórios, administrativos e contenciosos perante o Ministério Público de Minas Gerais (MPMG) e tribunais regionais, conduz uma advocacia firme e estratégica voltada à concessão de benefícios junto ao INSS, revisões de aposentadorias e reparação rigorosa de passivos trabalhistas.
+                        </p>
+                    </div>
+                </article>
+
+                <!-- Card 3: Dra. Rosevania Correia Nunes da Mata -->
+                <article class="group bg-[#2C2C2C] border border-[#848484]/20 hover:border-[#D4AF37] rounded-2xl p-6 shadow-xl transition-all duration-300 flex flex-col">
+                    <div class="relative aspect-[3/4] w-full overflow-hidden rounded-lg bg-[#0D0D0D] border border-[#D4AF37]/30 group-hover:border-[#D4AF37] border-b-2 border-b-[#D4AF37] transition-colors duration-300 mb-6">
+                        <!-- TODO: Substituir filler.jpeg pela foto oficial do(a) advogado(a) -->
+                        <img src="{{ asset('assets/filler.jpeg') }}"
+                             alt="Dra. Rosevania Correia Nunes da Mata - Nunes & Durães Advocacia"
+                             class="w-full h-full object-cover object-top transition-transform duration-500 group-hover:scale-105">
+                        <div class="absolute inset-0 bg-gradient-to-t from-[#2C2C2C] via-transparent to-transparent opacity-80 pointer-events-none"></div>
+                    </div>
+
+                    <div class="flex flex-col flex-grow">
+                        <h3 class="font-serif text-xl sm:text-2xl font-bold text-[#F9F9FB] group-hover:text-[#D4AF37] transition-colors duration-300">
+                            Dra. Rosevania Correia Nunes da Mata
+                        </h3>
+                        <p class="font-sans text-xs sm:text-sm font-semibold tracking-wider text-[#D4AF37] mt-1 mb-4 uppercase">
+                            OAB/MG 202.752
+                        </p>
+
+                        <div class="flex flex-wrap gap-2 mb-5">
+                            <span class="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37]/40">
+                                Direitos dos Servidores Públicos
+                            </span>
+                            <span class="font-sans text-xs font-medium px-3 py-1 rounded-full bg-[#0D0D0D] text-[#D4AF37] border border-[#D4AF37]/40">
+                                Direito Administrativo
+                            </span>
+                        </div>
+
+                        <p class="font-sans text-sm text-[#B4B4B4] leading-relaxed">
+                            Inscrita na 11ª Subseção da OAB/MG após aprovação no XXIX Exame de Ordem, é a especialista do escritório dedicada à defesa funcional. Com trajetória prévia no serviço público do Estado de Minas Gerais na área da educação, conhece profundamente o funcionamento da Administração Pública. Sua atuação técnica foca na proteção de servidores em Processos Administrativos Disciplinares (PADs), garantia de progressões de carreira, revisões salariais e combate a ilegalidades estatais.
+                        </p>
+                    </div>
+                </article>
+
+            </div>
+
+            <!-- 4.4. Bloco de Localização e Expediente (Abaixo dos Cards) -->
+            <div class="mt-12 bg-[#2C2C2C] border border-[#848484]/20 rounded-2xl p-6 sm:p-8 shadow-lg">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-center md:text-left">
+                    <div class="flex flex-col md:flex-row items-center gap-3.5">
+                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-[#0D0D0D] border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </span>
+                        <div>
+                            <span class="block font-sans text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Endereço</span>
+                            <span class="font-sans text-sm text-[#F9F9FB]">Av. Presidente Costa e Silva, 346 - Centro, Capitão Enéas - MG (CEP 39472-000)</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center gap-3.5">
+                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-[#0D0D0D] border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                            </svg>
+                        </span>
+                        <div>
+                            <span class="block font-sans text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Expediente</span>
+                            <span class="font-sans text-sm text-[#F9F9FB]">Segunda a Quinta-feira, das 08h00 às 17h00</span>
+                        </div>
+                    </div>
+
+                    <div class="flex flex-col md:flex-row items-center gap-3.5">
+                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-[#0D0D0D] border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37]">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
+                            </svg>
+                        </span>
+                        <div>
+                            <span class="block font-sans text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Contato / WhatsApp</span>
+                            <a href="tel:38998414101" class="font-sans text-sm text-[#F9F9FB] hover:text-[#D4AF37] transition-colors duration-200">(38) 99841-4101</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </section>
+
     <!-- RODAPÉ (FOOTER) - Fundo Preto Absoluto fiel a image_12.png -->
     <footer id="contato" class="relative z-10 bg-preto-absoluto border-t border-[#1C1C1C] py-10 px-6 sm:px-12 text-center text-prata-moderno scroll-mt-28">
         <div class="max-w-7xl mx-auto flex flex-col items-center justify-center space-y-4">
@@ -240,10 +410,16 @@
                     <span>contato@nuneseduraes.com.br</span>
                 </a>
                 <span class="text-prata-moderno/40 hidden sm:inline">•</span>
-                <a href="tel:11999999999" class="inline-flex items-center gap-2 hover:text-dourado-prestigio transition-colors duration-200">
+                <a href="tel:38998414101" class="inline-flex items-center gap-2 hover:text-dourado-prestigio transition-colors duration-200">
                     <span class="text-dourado-prestigio text-base">☏</span>
-                    <span>(11) 99999-9999</span>
+                    <span>(38) 99841-4101</span>
                 </a>
+            </div>
+
+            <!-- Endereço e Horário de Atendimento no Rodapé -->
+            <div class="text-xs sm:text-sm text-[#B4B4B4] space-y-1">
+                <p>Avenida Presidente Costa e Silva, 346 - Centro, Capitão Enéas - MG, CEP: 39472-000</p>
+                <p class="text-[#848484]">Horário de Atendimento: Segunda a Quinta-feira, das 08h00 às 17h00</p>
             </div>
 
             <!-- Direitos Autorais no Rodapé Inferior -->
