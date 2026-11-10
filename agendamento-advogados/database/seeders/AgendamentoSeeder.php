@@ -25,6 +25,19 @@ class AgendamentoSeeder extends Seeder
         // Status permitidos pela migration
         $statusDisponiveis = ['pendente', 'concluido', 'cancelado'];
 
+        $mensagensExemplo = [
+            'Gostaria de orientação sobre rescisão indireta do contrato de trabalho e cálculo de verbas rescisórias.',
+            'Preciso de análise urgente sobre revisão de benefício previdenciário junto ao INSS.',
+            'Tenho dúvidas sobre inventário extrajudicial e partilha de bens familiares.',
+            'Solicito consultoria referente a processo administrativo disciplinar (PAD) no serviço público.',
+            'Fui cobrado indevidamente e tive meu nome negativado. Desejo ingressar com ação indenizatória.',
+            'Preciso de acompanhamento jurídico em audiência de conciliação na área cível.',
+            'Gostaria de avaliar a possibilidade de revisão contratual e defesa em execução.',
+            'Necessito de orientação sobre guarda compartilhada e regulamentação de pensão alimentícia.',
+            'Busco assessoria jurídica para defesa trabalhista e apuração de horas extras não pagas.',
+            'Preciso de atendimento para análise de recurso em processo judicial em andamento.',
+        ];
+
         for ($i = 0; $i < 50; $i++) {
             Agendamento::create([
                 'nome' => $faker->name,
@@ -33,6 +46,7 @@ class AgendamentoSeeder extends Seeder
                 'servico_id' => $faker->randomElement($servicosIds),
                 'data' => $faker->dateTimeBetween('-1 month', '+2 months')->format('Y-m-d'),
                 'horario' => $faker->time('H:i'),
+                'mensagem' => $faker->randomElement($mensagensExemplo),
                 'status' => $faker->randomElement($statusDisponiveis),
             ]);
         }

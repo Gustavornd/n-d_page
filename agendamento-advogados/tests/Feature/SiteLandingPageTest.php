@@ -60,15 +60,21 @@ class SiteLandingPageTest extends TestCase
         $response->assertSee('Direito Empresarial');
         $response->assertSee('name="data"', false);
         $response->assertSee('name="horario"', false);
+        $response->assertSee('Descreva seu caso (Opcional).');
+        $response->assertSee('<textarea id="mensagem" name="mensagem" rows="3" placeholder="Como podemos ajudar você?"', false);
         $response->assertSee('name="mensagem"', false);
         $response->assertSee('placeholder="Como podemos ajudar você?"', false);
         $response->assertSee('ENVIAR MENSAGEM →');
 
         // Sobre Nós Section
         $response->assertSee('id="sobre-nos"', false);
-        $response->assertSee('TRADIÇÃO FAMILIAR &amp; EXCELÊNCIA JURÍDICA', false);
+        $response->assertSee('ATUAÇÃO ESTRATÉGICA &amp; EXCELÊNCIA JURÍDICA', false);
+        $response->assertDontSee('Tradição Familiar');
+        $response->assertDontSee('TRADIÇÃO FAMILIAR');
+        $response->assertDontSee('tradição jurídica familiar');
         $response->assertSee('Sobre a Nunes &amp; Durães Advocacia', false);
-        $response->assertSee('Com sede estrategicamente localizada no centro de Capitão Enéas – MG');
+        $response->assertSee('Capitão Enéas – MG');
+        $response->assertSee('Montes Claros – MG');
         $response->assertSee('filler.jpeg', false);
         $response->assertSee('<!-- TODO: Substituir filler.jpeg pela foto oficial do(a) advogado(a) -->', false);
 
@@ -97,14 +103,18 @@ class SiteLandingPageTest extends TestCase
         $response->assertSee('Direito Administrativo');
         $response->assertSee('Inscrita na 11ª Subseção da OAB/MG após aprovação no XXIX Exame de Ordem');
 
-        // Office Location & Schedule
-        $response->assertSee('Av. Presidente Costa e Silva, 346 - Centro, Capitão Enéas - MG (CEP 39472-000)');
+        // Office Locations, Phones & Schedule
         $response->assertSee('Avenida Presidente Costa e Silva, 346 - Centro, Capitão Enéas - MG, CEP: 39472-000');
+        $response->assertSee('Rua Ismael Duarte, 376, Vila Campos, Montes Claros - MG, CEP: 39403-056');
+        $response->assertSee('(38) 99841-4101');
+        $response->assertSee('(38) 99852-7655');
+        $response->assertSee('(38) 99939-3133');
         $response->assertSee('Segunda a Quinta-feira, das 08h00 às 17h00');
 
-        // Footer
+        // Footer & Email Removal
         $response->assertSee('N / D');
-        $response->assertSee('contato@nuneseduraes.com.br');
+        $response->assertDontSee('contato@nuneseduraes.com');
+        $response->assertDontSee('contato@nuneseduraes.com.br');
         $response->assertSee('Todos os direitos reservados.');
     }
 
@@ -134,6 +144,59 @@ class SiteLandingPageTest extends TestCase
             'servico_id' => $servico->id,
             'data' => $proximaSegunda,
             'horario' => '10:00',
+            'mensagem' => 'Gostaria de avaliar um contrato empresarial de grande porte.',
+        ]);
+    }
+
+    public function test_form_submission_without_mensagem_succeeds_and_stores_null(): void
+    {
+        $servico = Servico::create(['titulo' => 'Direito Previdenciário', 'ativa' => true]);
+        Expediente::create(['dia_semana' => 1, 'inicio' => '08:00', 'fim' => '18:00']);
+
+        $proximaSegunda = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
+
+        $response = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Ana Souza',
+            'email' => 'ana@exemplo.com',
+            'telefone' => '(38) 99111-2222',
+            'servico_id' => $servico->id,
+            'data' => $proximaSegunda,
+            'horario' => '11:00',
+            'mensagem' => '',
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHas('sucesso', 'Sua Solicitação foi enviada com Sucesso!');
+
+        $this->assertDatabaseHas('agendamentos', [
+            'nome' => 'Ana Souza',
+            'email' => 'ana@exemplo.com',
+            'servico_id' => $servico->id,
+            'data' => $proximaSegunda,
+            'horario' => '11:00',
+            'mensagem' => null,
+        ]);
+
+        // Also test when 'mensagem' key is omitted completely (null)
+        $responseOmitted = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Lucas Martins',
+            'email' => 'lucas@exemplo.com',
+            'telefone' => '(38) 99333-4444',
+            'servico_id' => $servico->id,
+            'data' => $proximaSegunda,
+            'horario' => '15:00',
+        ]);
+
+        $responseOmitted->assertRedirect(route('home'));
+        $responseOmitted->assertSessionHas('sucesso', 'Sua Solicitação foi enviada com Sucesso!');
+
+        $this->assertDatabaseHas('agendamentos', [
+            'nome' => 'Lucas Martins',
+            'email' => 'lucas@exemplo.com',
+            'servico_id' => $servico->id,
+            'data' => $proximaSegunda,
+            'horario' => '15:00',
+            'mensagem' => null,
         ]);
     }
 
@@ -184,5 +247,26 @@ class SiteLandingPageTest extends TestCase
 
         $response->assertRedirect(route('home'));
         $response->assertSessionHasErrors(['data']);
+    }
+
+    public function test_form_submission_with_mensagem_exceeding_1000_chars_is_rejected(): void
+    {
+        $servico = Servico::create(['titulo' => 'Direito Trabalhista', 'ativa' => true]);
+        Expediente::create(['dia_semana' => 1, 'inicio' => '08:00', 'fim' => '18:00']);
+
+        $proximaSegunda = Carbon::now()->next(Carbon::MONDAY)->format('Y-m-d');
+
+        $response = $this->from(route('home'))->post(route('agendar'), [
+            'nome' => 'Pedro Santos',
+            'email' => 'pedro@exemplo.com',
+            'telefone' => '(38) 98888-7777',
+            'servico_id' => $servico->id,
+            'data' => $proximaSegunda,
+            'horario' => '14:00',
+            'mensagem' => str_repeat('A', 1001),
+        ]);
+
+        $response->assertRedirect(route('home'));
+        $response->assertSessionHasErrors(['mensagem']);
     }
 }

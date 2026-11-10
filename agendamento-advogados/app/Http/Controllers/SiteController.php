@@ -22,7 +22,8 @@ class SiteController extends Controller
         'telefone' => 'required|string|max:20',
         'servico_id' => 'required|exists:servicos,id',
         'data' => 'required|date|after_or_equal:today',
-        'horario' => 'required'
+        'horario' => 'required',
+        'mensagem' => 'nullable|string|max:1000',
     ]);
 
     $dataEscolhida = Carbon::parse($dadosValidados['data']);

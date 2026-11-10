@@ -8,7 +8,7 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 class Agendamento extends Model
 {
     use HasFactory;
-    protected $fillable = ['nome', 'email','telefone', 'servico_id', 'data', 'horario', 'status'];
+    protected $fillable = ['nome', 'email', 'telefone', 'servico_id', 'data', 'horario', 'mensagem', 'status'];
 
     public function servico()
     {

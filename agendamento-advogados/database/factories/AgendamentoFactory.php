@@ -16,6 +16,7 @@ class AgendamentoFactory extends Factory
             'servico_id' => Servico::factory(),
             'data' => fake()->dateTimeBetween('+1 days', '+1 month')->format('Y-m-d'),
             'horario' => fake()->numberBetween(8, 17) . ':00',
+            'mensagem' => fake()->sentence(),
             'status' => 'pendente',
         ];
     }

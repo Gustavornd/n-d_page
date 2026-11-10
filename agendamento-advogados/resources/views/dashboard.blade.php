@@ -38,7 +38,7 @@
 
                 <!-- barra de pesquisa -->
                 <form method="GET" action="{{ route('dashboard') }}">
-                    <input type="text" name="busca" placeholder="Buscar por nome ou email..."
+                    <input type="text" name="busca" placeholder="Buscar por nome, email ou mensagem..."
                         value="{{ request('busca') }}" class="w-80 px-3 py-2 border rounded-lg bg-dust-grey text-graphite">
                     <button type="submit"
                         class="border border-bright-lemon bg-bright-amber text-carbon-black rounded-md px-4 py-2 m-2 transition duration-500 ease select-none hover:bg-bright-lemon focus:outline-none focus:shadow-outline">Buscar</button>
@@ -53,6 +53,7 @@
                                 <th class="py-3 px-6 text-left">Data / Hora</th>
                                 <th class="py-3 px-6 text-left">Cliente</th>
                                 <th class="py-3 px-6 text-left">Serviço</th>
+                                <th class="py-3 px-6 text-left">Mensagem</th>
                                 <th class="py-3 px-6 text-left">Status</th>
                                 <th class="py-3 px-6 text-left">Ações</th>
                             </tr>
@@ -68,7 +69,16 @@
                                         <div>{{ $agendamento->email }}</div>
                                         <div>{{ $agendamento->telefone }}</div>
                                     </td>
-                                    <td class="py-3 px-6 text-left">{{ $agendamento->servico->titulo ?? 'N/A' }}</td>
+                                    <td class="py-3 px-6 text-left">
+                                        <div class="font-semibold">{{ $agendamento->servico->titulo ?? 'N/A' }}</div>
+                                    </td>
+                                    <td class="py-3 px-6 text-left max-w-xs">
+                                        @if(filled($agendamento->mensagem))
+                                            <div class="max-w-xs text-sm text-carbon-black whitespace-pre-line break-words">{{ $agendamento->mensagem }}</div>
+                                        @else
+                                            <span class="text-xs text-gray-500 italic">Sem mensagem</span>
+                                        @endif
+                                    </td>
                                     <td class="py-3 px-6 text-left">
                                         <span class="px-2 inline-flex text-xs leading-5 font-semibold rounded-full 
                                             @if($agendamento->status == 'pendente') bg-blue-500 text-white
@@ -116,7 +126,7 @@
                                 </tr>
                             @empty
                                 <tr>
-                                    <td class="py-3 px-6 text-left" colspan="5">Nenhum agendamento encontrado.</td>
+                                    <td class="py-3 px-6 text-left" colspan="6">Nenhum agendamento encontrado.</td>
                                 </tr>
                             @endforelse
                         </tbody>

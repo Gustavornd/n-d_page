@@ -13,11 +13,13 @@ class AdminController extends Controller
         $query = Agendamento::with('servico')->orderBy('data', 'asc')->orderBy('horario', 'asc');
         $hoje = Carbon::today();
 
-        if($request->busca){
+        if($request->filled('busca')){
+            $termoBusca = trim((string) $request->busca);
             // Se houver busca, procura em todo o banco (ignorando a data) e agrupa as cláusulas OR
-            $query->where(function($q) use ($request) {
-                $q->where('nome', 'like', '%' . $request->busca . '%')
-                  ->orWhere('email', 'like', '%' . $request->busca . '%');
+            $query->where(function($q) use ($termoBusca) {
+                $q->where('nome', 'like', '%' . $termoBusca . '%')
+                  ->orWhere('email', 'like', '%' . $termoBusca . '%')
+                  ->orWhere('mensagem', 'like', '%' . $termoBusca . '%');
             });
         } else {
             // Se NÃO houver busca, filtra apenas agendamentos de hoje em diante

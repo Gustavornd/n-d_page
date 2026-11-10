@@ -193,10 +193,10 @@
                                 </div>
                             </div>
 
-                            <!-- Mensagem (Área de texto descrita no layout de referência) -->
+                            <!-- Mensagem (Área de texto opcional para descrição do caso) -->
                             <div>
                                 <label for="mensagem" class="block text-xs font-medium text-off-white mb-1.5 tracking-wide">
-                                    Mensagem
+                                    Descreva seu caso (Opcional).
                                 </label>
                                 <textarea id="mensagem" name="mensagem" rows="3" placeholder="Como podemos ajudar você?"
                                     class="w-full bg-[#181818] border @error('mensagem') border-red-500/80 focus:border-red-500 focus:ring-red-500/50 @else border-prata-moderno/40 focus:border-dourado-prestigio focus:ring-dourado-prestigio/50 @enderror text-off-white placeholder-prata-moderno rounded-lg px-4 py-2.5 text-sm focus:outline-none focus:ring-1 transition duration-200 resize-none">{{ old('mensagem') }}</textarea>
@@ -226,14 +226,14 @@
             <!-- 4.1. Cabeçalho Institucional da Seção -->
             <div class="max-w-3xl mx-auto text-center">
                 <span class="inline-block font-sans text-xs sm:text-sm font-bold uppercase tracking-[0.25em] text-[#D4AF37] mb-3">
-                    TRADIÇÃO FAMILIAR &amp; EXCELÊNCIA JURÍDICA
+                    ATUAÇÃO ESTRATÉGICA &amp; EXCELÊNCIA JURÍDICA
                 </span>
                 <h2 class="font-serif text-3xl sm:text-4xl lg:text-5xl font-bold text-[#F9F9FB] tracking-wide mb-6">
                     Sobre a Nunes &amp; Durães Advocacia
                 </h2>
                 <div class="w-20 h-0.5 bg-[#D4AF37] mx-auto mb-6"></div>
                 <p class="font-sans text-[#B4B4B4] text-base sm:text-lg leading-relaxed">
-                    Com sede estrategicamente localizada no centro de Capitão Enéas – MG, o escritório Nunes &amp; Durães Advocacia une a solidez de uma tradição jurídica familiar a uma atuação técnica, moderna e combativa. Nosso compromisso é oferecer soluções jurídicas personalizadas, éticas e de alto padrão na defesa do patrimônio, da liberdade e dos direitos de nossos clientes em todas as instâncias.
+                    Com unidades estrategicamente localizadas em <strong class="text-[#F9F9FB] font-semibold">Capitão Enéas – MG</strong> e <strong class="text-[#F9F9FB] font-semibold">Montes Claros – MG</strong>, o escritório Nunes &amp; Durães Advocacia destaca-se por uma atuação técnica, moderna e combativa em todo o Norte de Minas. Nosso compromisso é oferecer soluções jurídicas personalizadas, éticas e de alto padrão na defesa do patrimônio, da liberdade e dos direitos de nossos clientes em todas as instâncias.
                 </p>
             </div>
 
@@ -344,43 +344,56 @@
 
             </div>
 
-            <!-- 4.4. Bloco de Localização e Expediente (Abaixo dos Cards) -->
+            <!-- 4.4. Bloco de Unidades e Expediente (Abaixo dos Cards) -->
             <div class="mt-12 bg-[#2C2C2C] border border-[#848484]/20 rounded-2xl p-6 sm:p-8 shadow-lg">
-                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-center text-center md:text-left">
-                    <div class="flex flex-col md:flex-row items-center gap-3.5">
-                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-[#0D0D0D] border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37]">
+                <div class="grid grid-cols-1 md:grid-cols-3 gap-6 items-start text-center md:text-left">
+                    <!-- Unidade 1: Capitão Enéas -->
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-3.5">
+                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-[#0D0D0D] border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37] mt-0.5">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
                             </svg>
                         </span>
-                        <div>
-                            <span class="block font-sans text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Endereço</span>
-                            <span class="font-sans text-sm text-[#F9F9FB]">Av. Presidente Costa e Silva, 346 - Centro, Capitão Enéas - MG (CEP 39472-000)</span>
+                        <div class="space-y-1">
+                            <span class="block font-sans text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Unidade Capitão Enéas – MG</span>
+                            <p class="font-sans text-sm text-[#F9F9FB]">Avenida Presidente Costa e Silva, 346 - Centro, Capitão Enéas - MG, CEP: 39472-000</p>
+                            <div class="flex flex-wrap justify-center md:justify-start items-center gap-2 pt-1 text-xs sm:text-sm text-[#B4B4B4]">
+                                <a href="tel:38998414101" class="text-[#F9F9FB] hover:text-[#D4AF37] transition-colors duration-200 font-medium">(38) 99841-4101</a>
+                                <span class="text-[#848484]">•</span>
+                                <a href="tel:38998527655" class="text-[#F9F9FB] hover:text-[#D4AF37] transition-colors duration-200 font-medium">(38) 99852-7655</a>
+                            </div>
                         </div>
                     </div>
 
-                    <div class="flex flex-col md:flex-row items-center gap-3.5">
-                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-[#0D0D0D] border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37]">
+                    <!-- Unidade 2: Montes Claros -->
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-3.5">
+                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-[#0D0D0D] border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37] mt-0.5">
+                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                            </svg>
+                        </span>
+                        <div class="space-y-1">
+                            <span class="block font-sans text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Unidade Montes Claros – MG</span>
+                            <p class="font-sans text-sm text-[#F9F9FB]">Rua Ismael Duarte, 376, Vila Campos, Montes Claros - MG, CEP: 39403-056</p>
+                            <div class="flex flex-wrap justify-center md:justify-start items-center gap-2 pt-1 text-xs sm:text-sm text-[#B4B4B4]">
+                                <a href="tel:38999393133" class="text-[#F9F9FB] hover:text-[#D4AF37] transition-colors duration-200 font-medium">(38) 99939-3133</a>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Expediente e Canais -->
+                    <div class="flex flex-col md:flex-row items-center md:items-start gap-3.5">
+                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-[#0D0D0D] border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37] mt-0.5">
                             <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
                                 <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
                             </svg>
                         </span>
-                        <div>
-                            <span class="block font-sans text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Expediente</span>
-                            <span class="font-sans text-sm text-[#F9F9FB]">Segunda a Quinta-feira, das 08h00 às 17h00</span>
-                        </div>
-                    </div>
-
-                    <div class="flex flex-col md:flex-row items-center gap-3.5">
-                        <span class="flex-shrink-0 w-10 h-10 rounded-full bg-[#0D0D0D] border border-[#D4AF37]/40 flex items-center justify-center text-[#D4AF37]">
-                            <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24">
-                                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="1.8" d="M3 5a2 2 0 012-2h3.28a1 1 0 01.948.684l1.498 4.493a1 1 0 01-.502 1.21l-2.257 1.13a11.042 11.042 0 005.516 5.516l1.13-2.257a1 1 0 011.21-.502l4.493 1.498a1 1 0 01.684.949V19a2 2 0 01-2 2h-1C9.716 21 3 14.284 3 6V5z" />
-                            </svg>
-                        </span>
-                        <div>
-                            <span class="block font-sans text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Contato / WhatsApp</span>
-                            <a href="tel:38998414101" class="font-sans text-sm text-[#F9F9FB] hover:text-[#D4AF37] transition-colors duration-200">(38) 99841-4101</a>
+                        <div class="space-y-1">
+                            <span class="block font-sans text-xs uppercase tracking-wider text-[#D4AF37] font-semibold">Horário de Atendimento</span>
+                            <p class="font-sans text-sm text-[#F9F9FB]">Segunda a Quinta-feira, das 08h00 às 17h00</p>
+                            <p class="font-sans text-xs text-[#B4B4B4] pt-1">Atendimento via Telefone/WhatsApp ou pelo Formulário de Agendamento Online</p>
                         </div>
                     </div>
                 </div>
@@ -403,23 +416,29 @@
                 </span>
             </div>
 
-            <!-- Contatos na mesma linha em Prata/Off-White com ícones discretos -->
-            <div class="flex flex-wrap items-center justify-center gap-5 sm:gap-8 text-sm text-off-white/90 pt-1">
-                <a href="mailto:contato@nuneseduraes.com.br" class="inline-flex items-center gap-2 hover:text-dourado-prestigio transition-colors duration-200">
-                    <span class="text-dourado-prestigio text-base">✉</span>
-                    <span>contato@nuneseduraes.com.br</span>
-                </a>
-                <span class="text-prata-moderno/40 hidden sm:inline">•</span>
+            <!-- Contatos Telefônicos / WhatsApp das Unidades -->
+            <div class="flex flex-wrap items-center justify-center gap-4 sm:gap-6 text-sm text-off-white/90 pt-1">
                 <a href="tel:38998414101" class="inline-flex items-center gap-2 hover:text-dourado-prestigio transition-colors duration-200">
                     <span class="text-dourado-prestigio text-base">☏</span>
-                    <span>(38) 99841-4101</span>
+                    <span>Capitão Enéas: (38) 99841-4101</span>
+                </a>
+                <span class="text-prata-moderno/40 hidden sm:inline">•</span>
+                <a href="tel:38998527655" class="inline-flex items-center gap-2 hover:text-dourado-prestigio transition-colors duration-200">
+                    <span class="text-dourado-prestigio text-base">☏</span>
+                    <span>(38) 99852-7655</span>
+                </a>
+                <span class="text-prata-moderno/40 hidden sm:inline">•</span>
+                <a href="tel:38999393133" class="inline-flex items-center gap-2 hover:text-dourado-prestigio transition-colors duration-200">
+                    <span class="text-dourado-prestigio text-base">☏</span>
+                    <span>Montes Claros: (38) 99939-3133</span>
                 </a>
             </div>
 
-            <!-- Endereço e Horário de Atendimento no Rodapé -->
-            <div class="text-xs sm:text-sm text-[#B4B4B4] space-y-1">
-                <p>Avenida Presidente Costa e Silva, 346 - Centro, Capitão Enéas - MG, CEP: 39472-000</p>
-                <p class="text-[#848484]">Horário de Atendimento: Segunda a Quinta-feira, das 08h00 às 17h00</p>
+            <!-- Endereços das 2 Unidades e Horário de Atendimento no Rodapé -->
+            <div class="text-xs sm:text-sm text-[#B4B4B4] space-y-1.5">
+                <p><strong class="text-off-white font-medium">Capitão Enéas – MG:</strong> Avenida Presidente Costa e Silva, 346 - Centro, Capitão Enéas - MG, CEP: 39472-000</p>
+                <p><strong class="text-off-white font-medium">Montes Claros – MG:</strong> Rua Ismael Duarte, 376, Vila Campos, Montes Claros - MG, CEP: 39403-056</p>
+                <p class="text-[#848484] pt-0.5">Horário de Atendimento: Segunda a Quinta-feira, das 08h00 às 17h00</p>
             </div>
 
             <!-- Direitos Autorais no Rodapé Inferior -->
